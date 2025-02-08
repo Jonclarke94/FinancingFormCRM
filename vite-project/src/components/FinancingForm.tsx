@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import {
   Card,
   CardHeader,
@@ -12,8 +12,21 @@ import {
   Typography,
 } from '@mui/material';
 
+// Define the shape of the form data
+interface FormData {
+  cashNeeded: string;
+  monthlySales: string;
+  financingType: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  consent1: boolean;
+  consent2: boolean;
+}
+
 const FinancingForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     cashNeeded: '',
     monthlySales: '',
     financingType: '',
@@ -25,19 +38,25 @@ const FinancingForm = () => {
     consent2: false,
   });
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     // Add your form submission logic here
   };
 
-  const formatCurrency = (value) => {
+  // Format currency input
+  const formatCurrency = (value: string): string => {
     if (!value) return '';
     const digits = value.replace(/\D/g, '');
     return `$${parseInt(digits || '0').toLocaleString()}`;
   };
 
-  const handleCurrencyInput = (e, field) => {
+  // Handle currency input changes
+  const handleCurrencyInput = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    field: keyof FormData
+  ) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, '');
     setFormData({
       ...formData,
@@ -46,15 +65,23 @@ const FinancingForm = () => {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '16px' }}>
-      {/* Larger Logo Placeholder */}
-      <div style={{ textAlign: 'center', padding: '32px', backgroundColor: '#f5f5f5', borderRadius: '8px', marginBottom: '24px' }}>
-        <Typography variant="h4" color="textSecondary">
-          Your Logo Here
-        </Typography>
-      </div>
-
-      <Card>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh', // Full viewport height
+        padding: '16px', // Add padding to avoid touching the edges
+        backgroundColor: '#f9f9f9', // Light background color
+      }}
+    >
+      <Card
+        style={{
+          width: '100%',
+          maxWidth: '800px', // Maximum width for larger screens
+          padding: '24px', // Inner padding
+        }}
+      >
         <CardHeader
           title={
             <Typography variant="h4" align="center" gutterBottom>
@@ -63,7 +90,14 @@ const FinancingForm = () => {
           }
         />
         <CardContent>
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px', // Spacing between form elements
+            }}
+          >
             {/* Financial Information */}
             <TextField
               label="How Much Cash Do You Need?"
@@ -84,7 +118,9 @@ const FinancingForm = () => {
             <Typography variant="body1">What Are You Interested In?</Typography>
             <RadioGroup
               value={formData.financingType}
-              onChange={(e) => setFormData({ ...formData, financingType: e.target.value })}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setFormData({ ...formData, financingType: e.target.value })
+              }
             >
               <FormControlLabel
                 value="workingCapital"
@@ -103,13 +139,17 @@ const FinancingForm = () => {
               <TextField
                 label="First Name"
                 value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+                  setFormData({ ...formData, firstName: e.target.value })
+                }
                 fullWidth
               />
               <TextField
                 label="Last Name"
                 value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+                  setFormData({ ...formData, lastName: e.target.value })
+                }
                 fullWidth
               />
             </div>
@@ -118,7 +158,9 @@ const FinancingForm = () => {
               label="Business Email Address"
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               fullWidth
             />
 
@@ -126,7 +168,9 @@ const FinancingForm = () => {
               label="Cell Phone Number"
               type="tel"
               value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
               placeholder="(123) 456-7890"
               fullWidth
             />
@@ -136,7 +180,9 @@ const FinancingForm = () => {
               control={
                 <Checkbox
                   checked={formData.consent1}
-                  onChange={(e) => setFormData({ ...formData, consent1: e.target.checked })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setFormData({ ...formData, consent1: e.target.checked })
+                  }
                 />
               }
               label="Consent Agreement 1 (to be implemented)"
@@ -146,7 +192,9 @@ const FinancingForm = () => {
               control={
                 <Checkbox
                   checked={formData.consent2}
-                  onChange={(e) => setFormData({ ...formData, consent2: e.target.checked })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setFormData({ ...formData, consent2: e.target.checked })
+                  }
                 />
               }
               label="Consent Agreement 2 (to be implemented)"
