@@ -4,10 +4,11 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  base: '/https://jonclarke94.github.io/FinancingFormCRM/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: '/https://Jonclarke94.github.io/FinancingFormCRM/'
+  
 });
